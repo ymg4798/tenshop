@@ -17,4 +17,9 @@ public class CategoryBroker {
 
 		return "success";
 	}
+
+	public String update(Long id, CategoryRegisterParam param) {
+		categoryService.update(id, param.name(), param.parentId());
+		return "success";
+	}
 }

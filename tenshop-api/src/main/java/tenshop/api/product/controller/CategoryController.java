@@ -3,7 +3,9 @@ package tenshop.api.product.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,6 +27,15 @@ public class CategoryController {
 		Map<String, String> map = new HashMap<>();
 
 		map.put("message", categoryBroker.save(param));
+
+		return Response.create(map);
+	}
+
+	@PutMapping("/categories/{categoryId}")
+	public Response update(@PathVariable("categoryId") Long categoryId, @RequestBody CategoryRegisterParam param) {
+		Map<String, String> map = new HashMap<>();
+
+		map.put("message", categoryBroker.update(categoryId, param));
 
 		return Response.create(map);
 	}

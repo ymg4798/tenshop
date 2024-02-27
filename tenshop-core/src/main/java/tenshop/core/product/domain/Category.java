@@ -45,6 +45,12 @@ public class Category extends BaseTimeEntity {
         this.categoryDepth = categoryDepth;
     }
 
+    public void update(String name, Category parent, int categoryDepth) {
+        this.name = name;
+        this.parent = parent;
+        this.categoryDepth = categoryDepth;
+    }
+
     public static Category create(String name, Category parent, int categoryDepth) {
         return new Category(name, parent, categoryDepth);
     }

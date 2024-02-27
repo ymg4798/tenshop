@@ -18,7 +18,7 @@ public class CategoryService {
 	@Transactional
 	public void save(String name, Integer parentId) {
 		Category parent = null;
-		if (parentId != null) {
+		if (parentId != null && parentId > 0) {
 			parent = categoryRepository.findById(Long.valueOf(parentId))
 				.orElseThrow(() -> new IllegalArgumentException("상위 카테고리가 존재하지 않습니다."));
 		}
@@ -27,6 +27,21 @@ public class CategoryService {
 		Category category = create(name, parent, depth);
 
 		categoryRepository.save(category);
+	}
+
+	@Transactional
+	public void update(Long id, String name, Integer parentId) {
+		Category category = findByCategoryId(id);
+
+		Category parent = null;
+		if (parentId != null) {
+			parent = categoryRepository.findById(Long.valueOf(parentId))
+				.orElseThrow(() -> new IllegalArgumentException("상위 카테고리가 존재하지 않습니다."));
+		}
+
+		int depth = parent != null ? parent.getCategoryDepth() + 1 : 0;
+
+		category.update(name, parent, depth);
 	}
 
 	public Category findByCategoryId(Long id) {
