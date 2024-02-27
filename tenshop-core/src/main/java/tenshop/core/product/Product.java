@@ -36,7 +36,7 @@ public class Product extends BaseTimeEntity {
 
     @Convert(converter = ProductStatusConverter.class)
     @Column(columnDefinition = "varchar(10)")
-    private ProductStatus status;
+    private ProductStatus status = ProductStatus.PREPARING;
 
     private int stock;
 
@@ -61,5 +61,14 @@ public class Product extends BaseTimeEntity {
 
     public static Product create(String name, Integer price, Integer stock, Category category, String content) {
         return new Product(name, price, stock, category, content);
+    }
+
+    public void updateStatus(ProductStatus newStatus) {
+        if (this.status == ProductStatus.PREPARING && newStatus == ProductStatus.SALE ||
+            this.status == ProductStatus.SALE && newStatus == ProductStatus.SOLD_OUT) {
+            this.status = newStatus;
+        } else {
+            throw new IllegalStateException("올바른 상태변경 값이 아닙니다. " + this.status + " to " + newStatus);
+        }
     }
 }
