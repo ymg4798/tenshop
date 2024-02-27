@@ -4,6 +4,7 @@ public record ProductRegisterParam(
 		String name,
 		Integer price,
 		Integer stock,
-		Long categoryId
+		Long categoryId,
+		String content
 ) {
 }

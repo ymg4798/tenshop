@@ -51,16 +51,15 @@ public class Product extends BaseTimeEntity {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ProductReview> productReviews;
 
-    public Product(String name, Integer price, Integer stock, Category category) {
+    public Product(String name, Integer price, Integer stock, Category category, String content) {
         this.name = name;
         this.price = price;
         this.stock = stock;
         this.category = category;
+        this.content = content;
     }
 
-    public static Product create(String name, Integer price, Integer stock, Category category) {
-        return new Product(name, price, stock, category);
+    public static Product create(String name, Integer price, Integer stock, Category category, String content) {
+        return new Product(name, price, stock, category, content);
     }
 }
-
-

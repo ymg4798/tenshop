@@ -13,7 +13,7 @@ public class ProductBroker {
 	private final ProductService productService;
 
 	public String save(ProductRegisterParam param) {
-		productService.save(param.name(), param.price(),  param.stock(), param.categoryId());
+		productService.save(param.name(), param.price(),  param.stock(), param.categoryId(), param.content());
 		return "success";
 	}
 }

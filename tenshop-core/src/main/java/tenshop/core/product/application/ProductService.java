@@ -17,10 +17,10 @@ public class ProductService {
 	private final CategoryRepository categoryRepository;
 
 	@Transactional
-	public Product save(String name, Integer price, Integer stock, Long categoryId) {
+	public Product save(String name, Integer price, Integer stock, Long categoryId, String content) {
 		Category category = findById(categoryId);
 
-		Product product = Product.create(name, price, stock, category);
+		Product product = Product.create(name, price, stock, category, content);
 
 		return productRepository.save(product);
 	}
