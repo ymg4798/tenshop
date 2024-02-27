@@ -28,10 +28,8 @@ public class Product extends BaseTimeEntity {
     @Column(columnDefinition = "varchar(10)")
     private ProductStatus status;
 
-    @Column(columnDefinition = "int(4)")
     private int stock;
 
-    @Column(columnDefinition = "int(11)")
     private int price;
 
     @Column(columnDefinition = "varchar(100)")

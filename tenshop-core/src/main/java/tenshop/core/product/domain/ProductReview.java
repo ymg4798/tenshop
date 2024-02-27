@@ -21,7 +21,6 @@ public class ProductReview extends BaseTimeEntity {
 
     private Long userId;
 
-    @Column(columnDefinition = "int(1)")
     private int rating;
 
     @Column(columnDefinition = "TEXT")

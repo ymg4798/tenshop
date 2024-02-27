@@ -11,6 +11,7 @@ import tenshop.core.order.domain.OrderProducts;
 import java.util.ArrayList;
 import java.util.List;
 
+@Table(name = "orders")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Order extends BaseTimeEntity {
@@ -29,10 +30,8 @@ public class Order extends BaseTimeEntity {
     @Column(columnDefinition = "varchar(100)")
     private String address;
 
-    @Column(columnDefinition = "int(11)")
     private int usePoint;
 
-    @Column(columnDefinition = "int(11)")
     private int paymentPrice;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

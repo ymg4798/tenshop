@@ -23,8 +23,7 @@ public class Category extends BaseTimeEntity {
     @Column(columnDefinition = "varchar(10)")
     private String name;
 
-    @Column(columnDefinition = "int(1)")
-    private int depth;
+    private int categoryDepth;
 
     @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Category> children;

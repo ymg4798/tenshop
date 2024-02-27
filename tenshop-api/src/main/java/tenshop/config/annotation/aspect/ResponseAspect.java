@@ -15,7 +15,7 @@ import static tenshop.config.annotation.aspect.dto.ResponseCommon.*;
 @Component
 public class ResponseAspect {
 
-    @Around("@within(sellyourunhappiness.api.config.response.annotation.ApiResponseAnnotation)")
+    @Around("@within(tenshop.config.annotation.ResponseAnnotation)")
     public Response doResponse(ProceedingJoinPoint joinPoint) {
         log.info("[ApiResponse] {}", joinPoint.getSignature());
 
