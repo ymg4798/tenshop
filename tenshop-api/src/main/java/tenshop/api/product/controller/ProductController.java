@@ -24,7 +24,7 @@ public class ProductController {
 	private final ProductBroker productBroker;
 
 	@PostMapping("/products")
-	public Response register(@RequestBody ProductRegisterParam param){
+	public Response register(@RequestBody ProductRegisterParam param) {
 		Map<String, String> map = new HashMap<>();
 
 		map.put("message", productBroker.save(param));
