@@ -1,0 +1,4 @@
+rootProject.name = 'tenshop'
+include 'tenshop-api'
+include 'tenshop-core'
+
