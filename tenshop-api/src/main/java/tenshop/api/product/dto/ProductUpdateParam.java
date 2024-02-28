@@ -1,6 +1,6 @@
 package tenshop.api.product.dto;
 
-public record ProductUpdateStatusParam(
+public record ProductUpdateParam(
 		String status
 ) {
 }

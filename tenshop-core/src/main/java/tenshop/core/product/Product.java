@@ -1,5 +1,6 @@
 package tenshop.core.product;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -21,6 +22,8 @@ import tenshop.core.product.converter.enums.ProductStatus;
 import tenshop.core.product.domain.Category;
 import tenshop.core.product.domain.ProductReview;
 
+import static tenshop.config.converter.EnumConverterUtils.ofName;
+
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Product extends BaseTimeEntity {
@@ -36,7 +39,7 @@ public class Product extends BaseTimeEntity {
 
     @Convert(converter = ProductStatusConverter.class)
     @Column(columnDefinition = "varchar(10)")
-    private ProductStatus status = ProductStatus.PREPARING;
+    private ProductStatus status;
 
     private int stock;
 
@@ -49,26 +52,30 @@ public class Product extends BaseTimeEntity {
     private String content;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<ProductReview> productReviews;
+    private List<ProductReview> productReviews = new ArrayList<>();
 
-    public Product(String name, Integer price, Integer stock, Category category, String content) {
-        this.name = name;
-        this.price = price;
+    public Product(ProductStatus status, int stock, int price, String name, String content) {
+        this.status = status;
         this.stock = stock;
-        this.category = category;
+        this.price = price;
+        this.name = name;
         this.content = content;
     }
 
-    public static Product create(String name, Integer price, Integer stock, Category category, String content) {
-        return new Product(name, price, stock, category, content);
+    public void setCategory(Category category) {
+        this.category = category;
+        category.getProducts().add(this);
     }
 
-    public void updateStatus(ProductStatus newStatus) {
-        if (this.status == ProductStatus.PREPARING && newStatus == ProductStatus.SALE ||
-            this.status == ProductStatus.SALE && newStatus == ProductStatus.SOLD_OUT) {
-            this.status = newStatus;
-        } else {
-            throw new IllegalStateException("올바른 상태변경 값이 아닙니다. " + this.status + " to " + newStatus);
-        }
+    public static Product create(String status, int stock, int price, String name, String content, Category category) {
+        Product product = new Product(ofName(ProductStatus.class, status), stock, price, name, content);
+        product.setCategory(category);
+        return product;
+    }
+
+    public void statusUpdate(String status) {
+        this.status = ofName(ProductStatus.class, status);
     }
 }
+
+
