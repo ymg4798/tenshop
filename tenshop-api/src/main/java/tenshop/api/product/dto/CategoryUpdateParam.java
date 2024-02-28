@@ -1,8 +1,6 @@
 package tenshop.api.product.dto;
 
-public record CategoryUpdateParam (
-	String name
+public record CategoryUpdateParam(
+        String name
 ) {
 }
-
-

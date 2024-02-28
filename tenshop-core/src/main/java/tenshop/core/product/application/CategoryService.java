@@ -29,13 +29,13 @@ public class CategoryService {
 	@Transactional
 	public void update(Long id, String name) {
 		Category category = categoryRepository.findById(id)
-			.orElseThrow(() -> new IllegalArgumentException("해당 카테고리가 존재하지 않습니다."));
+				.orElseThrow(() -> new IllegalArgumentException("해당 카테고리가 존재하지 않습니다."));
 		category.update(name);
 	}
 
 	public Category findById(Long id) {
 		return categoryRepository.findById(id)
-			.orElseThrow(() -> new IllegalArgumentException("해당 카테고리가 존재하지 않습니다."));
+				.orElseThrow(() -> new IllegalArgumentException("해당 카테고리가 존재하지 않습니다."));
 	}
 
 	@Transactional

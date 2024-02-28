@@ -28,8 +28,8 @@ public class CategoryController {
 		return Response.create(map);
 	}
 
-	@PutMapping("/category/{id}")
-	public Response updateCategory(@PathVariable("id") Long id, @RequestBody CategoryUpdateParam param) {
+	@PatchMapping("/category/{id}")
+	public Response update(@PathVariable("id") Long id, @RequestBody CategoryUpdateParam param) {
 		Map<String, String> map = new HashMap<>();
 
 		map.put("message", categoryBroker.update(id, param));

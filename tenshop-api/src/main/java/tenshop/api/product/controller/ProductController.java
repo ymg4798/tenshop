@@ -28,7 +28,7 @@ public class ProductController {
 	private final ProductBroker productBroker;
 
 	@PostMapping("/product")
-	public Response saveProduct(@RequestBody ProductRegisterParam param) {
+	public Response register(@RequestBody ProductRegisterParam param) {
 		Map<String, String> map = new HashMap<>();
 
 		map.put("message", productBroker.save(param));
@@ -37,10 +37,10 @@ public class ProductController {
 	}
 
 	@PatchMapping("/product/{id}/status")
-	public Response updateStatus(@PathVariable("id") Long id, @RequestBody ProductUpdateParam updateParam) {
+	public Response updateStatus(@PathVariable("id") Long id, @RequestBody ProductUpdateParam param) {
 		Map<String, Object> map = new HashMap<>();
 
-		map.put("message", productBroker.update(id, updateParam));
+		map.put("message", productBroker.update(id, param));
 
 		return create(map);
 	}

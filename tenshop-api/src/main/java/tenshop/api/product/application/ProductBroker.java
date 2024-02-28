@@ -22,11 +22,9 @@ import tenshop.core.product.domain.Category;
 public class ProductBroker {
 
 	private final ProductService productService;
-	private final CategoryService categoryService;
 
 	public String save(ProductRegisterParam param) {
-		Category category = categoryService.findById(param.categoryId());
-		productService.save(param.status(), param.stock(), param.price(), param.name(), param.content(), category);
+		productService.save(param.status(), param.stock(), param.price(), param.name(), param.content(), param.categoryId());
 		return "success";
 	}
 

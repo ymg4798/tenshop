@@ -2,6 +2,7 @@ package tenshop.core.product;
 
 import static tenshop.config.converter.EnumConverterUtils.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -40,7 +41,7 @@ public class Product extends BaseTimeEntity {
 
     @Convert(converter = ProductStatusConverter.class)
     @Column(columnDefinition = "varchar(10)")
-    private ProductStatus status = ProductStatus.PREPARING;
+    private ProductStatus status;
 
     private int stock;
 
@@ -53,14 +54,15 @@ public class Product extends BaseTimeEntity {
     private String content;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<ProductReview> productReviews;
+    private List<ProductReview> productReviews = new ArrayList<>();
 
-    public Product(ProductStatus status, int stock, int price, String name, String content) {
+    public Product(ProductStatus status, int stock, int price, String name, String content, Category category) {
         this.status = status;
         this.stock = stock;
         this.price = price;
         this.name = name;
         this.content = content;
+        this.category = category;
     }
 
     public void setCategory(Category category) {
@@ -69,8 +71,8 @@ public class Product extends BaseTimeEntity {
     }
 
     public static Product create(String status, int stock, int price, String name, String content, Category category) {
-        Product product = new Product(ofName(ProductStatus.class, status), stock, price, name, content);
-        product.setCategory(category);
+        Product product = new Product(ofName(ProductStatus.class, status), stock, price, name, content, category);
+        // product.setCategory(category);
         return product;
     }
 

@@ -39,18 +39,19 @@ public class Category extends BaseTimeEntity {
     private int depth;
 
     @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Category> children;
+    private List<Category> children = new ArrayList<>();
+
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Product> products = new ArrayList<>();
 
-    private Category(String name, int depth) {
+    public Category(String name, int depth) {
         this.name = name;
         this.depth = depth;
     }
 
     public void setParent(Category parent) {
         this.parent = parent;
-        if (parent != null) {
+        if(parent != null) {
             parent.getChildren().add(this);
         }
     }
