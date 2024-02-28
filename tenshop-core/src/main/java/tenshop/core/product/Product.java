@@ -1,5 +1,7 @@
 package tenshop.core.product;
 
+import static tenshop.config.converter.EnumConverterUtils.*;
+
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -14,6 +16,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import tenshop.config.auditing.BaseTimeEntity;
 import tenshop.core.product.converter.ProductStatusConverter;
@@ -22,6 +25,7 @@ import tenshop.core.product.domain.Category;
 import tenshop.core.product.domain.ProductReview;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 @Entity
 public class Product extends BaseTimeEntity {
 
@@ -51,24 +55,28 @@ public class Product extends BaseTimeEntity {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ProductReview> productReviews;
 
-    public Product(String name, Integer price, Integer stock, Category category, String content) {
-        this.name = name;
-        this.price = price;
+    public Product(ProductStatus status, int stock, int price, String name, String content) {
+        this.status = status;
         this.stock = stock;
-        this.category = category;
+        this.price = price;
+        this.name = name;
         this.content = content;
     }
 
-    public static Product create(String name, Integer price, Integer stock, Category category, String content) {
-        return new Product(name, price, stock, category, content);
+    public void setCategory(Category category) {
+        this.category = category;
+        category.getProducts().add(this);
     }
 
-    public void updateStatus(ProductStatus newStatus) {
-        if (this.status == ProductStatus.PREPARING && newStatus == ProductStatus.SALE ||
-            this.status == ProductStatus.SALE && newStatus == ProductStatus.SOLD_OUT) {
-            this.status = newStatus;
-        } else {
-            throw new IllegalStateException("올바른 상태변경 값이 아닙니다. " + this.status + " to " + newStatus);
-        }
+    public static Product create(String status, int stock, int price, String name, String content, Category category) {
+        Product product = new Product(ofName(ProductStatus.class, status), stock, price, name, content);
+        product.setCategory(category);
+        return product;
+    }
+
+    public void statusUpdate(String status) {
+        this.status = ofName(ProductStatus.class, status);
     }
 }
+
+

@@ -1,8 +1,11 @@
 package tenshop.api.product.controller;
 
+import static tenshop.config.annotation.aspect.dto.Response.*;
+
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,7 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import tenshop.api.product.application.ProductBroker;
 import tenshop.api.product.dto.ProductRegisterParam;
-import tenshop.api.product.dto.ProductUpdateStatusParam;
+import tenshop.api.product.dto.ProductSearchCondition;
+import tenshop.api.product.dto.ProductUpdateParam;
 import tenshop.config.annotation.ResponseAnnotation;
 import tenshop.config.annotation.aspect.dto.Response;
 
@@ -23,21 +27,28 @@ public class ProductController {
 
 	private final ProductBroker productBroker;
 
-	@PostMapping("/products")
-	public Response register(@RequestBody ProductRegisterParam param) {
+	@PostMapping("/product")
+	public Response saveProduct(@RequestBody ProductRegisterParam param) {
 		Map<String, String> map = new HashMap<>();
 
 		map.put("message", productBroker.save(param));
 
-		return Response.create(map);
+		return create(map);
 	}
 
-	@PatchMapping("/products/{productId}/status")
-	public Response updateStatus(@PathVariable("productId") Long productId, @RequestBody ProductUpdateStatusParam updateParam) {
+	@PatchMapping("/product/{id}/status")
+	public Response updateStatus(@PathVariable("id") Long id, @RequestBody ProductUpdateParam updateParam) {
 		Map<String, Object> map = new HashMap<>();
 
-		map.put("message", productBroker.update(productId, updateParam));
+		map.put("message", productBroker.update(id, updateParam));
 
-		return Response.create(map);
+		return create(map);
+	}
+
+	@GetMapping("/products")
+	public Response searchProducts(ProductSearchCondition condition){
+		return create(productBroker.findProductsBySearchCondition(condition));
 	}
 }
+
+

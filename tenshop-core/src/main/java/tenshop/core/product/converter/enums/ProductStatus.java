@@ -17,6 +17,19 @@ public enum ProductStatus implements EnumType {
         this.code = code;
         this.name = name;
     }
+
+    public boolean canChangeTo(ProductStatus status) {
+        switch (this) {
+            case PREPARING:
+                return status == SALE || status == SALE_END;
+            case SALE:
+                return status == SOLD_OUT || status == SALE_END;
+            case SOLD_OUT:
+                return status == SALE_END;
+            default:
+                return false;
+        }
+    }
 }
 
 

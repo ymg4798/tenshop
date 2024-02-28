@@ -6,5 +6,8 @@ import org.springframework.stereotype.Repository;
 import tenshop.core.product.Product;
 
 @Repository
-public interface ProductRepository extends JpaRepository<Product, Long> {
+public interface ProductRepository extends JpaRepository<Product, Long>, ProductRepositoryCustom {
+
 }
+
+

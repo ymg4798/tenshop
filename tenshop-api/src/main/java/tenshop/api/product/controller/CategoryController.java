@@ -3,15 +3,12 @@ package tenshop.api.product.controller;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import lombok.RequiredArgsConstructor;
 import tenshop.api.product.application.CategoryBroker;
 import tenshop.api.product.dto.CategoryRegisterParam;
+import tenshop.api.product.dto.CategoryUpdateParam;
 import tenshop.config.annotation.ResponseAnnotation;
 import tenshop.config.annotation.aspect.dto.Response;
 
@@ -22,7 +19,7 @@ public class CategoryController {
 
 	private final CategoryBroker categoryBroker;
 
-	@PostMapping("/categories")
+	@PostMapping("/category")
 	public Response register(@RequestBody CategoryRegisterParam param) {
 		Map<String, String> map = new HashMap<>();
 
@@ -31,12 +28,14 @@ public class CategoryController {
 		return Response.create(map);
 	}
 
-	@PutMapping("/categories/{categoryId}")
-	public Response update(@PathVariable("categoryId") Long categoryId, @RequestBody CategoryRegisterParam param) {
+	@PutMapping("/category/{id}")
+	public Response updateCategory(@PathVariable("id") Long id, @RequestBody CategoryUpdateParam param) {
 		Map<String, String> map = new HashMap<>();
 
-		map.put("message", categoryBroker.update(categoryId, param));
+		map.put("message", categoryBroker.update(id, param));
 
 		return Response.create(map);
 	}
 }
+
+

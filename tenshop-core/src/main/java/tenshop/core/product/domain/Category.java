@@ -1,5 +1,6 @@
 package tenshop.core.product.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -16,6 +17,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import tenshop.config.auditing.BaseTimeEntity;
+import tenshop.core.product.Product;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -34,25 +36,48 @@ public class Category extends BaseTimeEntity {
     @Column(columnDefinition = "varchar(10)")
     private String name;
 
-    private int categoryDepth;
+    private int depth;
 
     @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Category> children;
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Product> products = new ArrayList<>();
 
-    public Category(String name, Category parent, int categoryDepth) {
+    private Category(String name, int depth) {
         this.name = name;
-        this.parent = parent;
-        this.categoryDepth = categoryDepth;
+        this.depth = depth;
     }
 
-    public void update(String name, Category parent, int categoryDepth) {
-        this.name = name;
+    public void setParent(Category parent) {
         this.parent = parent;
-        this.categoryDepth = categoryDepth;
+        if (parent != null) {
+            parent.getChildren().add(this);
+        }
     }
 
-    public static Category create(String name, Category parent, int categoryDepth) {
-        return new Category(name, parent, categoryDepth);
+    public void addChildren(Category child) {
+        this.children.add(child);
+        child.setParent(this);
+    }
+
+    public static Category create(String name, int depth, Category parent, Category... children) {
+        Category category = new Category(name, depth);
+        category.validateDepth();
+        category.setParent(parent);
+        for (Category child : children) {
+            category.addChildren(child);
+        }
+        return category;
+    }
+
+    public void validateDepth() {
+        if (this.depth >= 4) {
+            throw new IllegalArgumentException("카테고리 분류는 소분류까지만 가능합니다.");
+        }
+    }
+
+    public void update(String name) {
+        this.name = name;
     }
 }
 

@@ -1,10 +1,13 @@
 package tenshop.api.product.dto;
 
 public record ProductRegisterParam(
+		String status,
+		int price,
+		int stock,
 		String name,
-		Integer price,
-		Integer stock,
-		Long categoryId,
-		String content
+		String content,
+		Long categoryId
 ) {
 }
+
+
