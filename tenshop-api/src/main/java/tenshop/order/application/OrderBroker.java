@@ -1,25 +1,28 @@
 package tenshop.order.application;
 
 import java.util.List;
-import java.util.stream.Collectors;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import tenshop.core.order.application.OrderService;
+import tenshop.core.order.converter.enums.OrderProductsStatus;
+import tenshop.core.order.converter.enums.OrderStatus;
 import tenshop.core.order.domain.OrderProducts;
 import tenshop.order.dto.OrderRegisterParam;
 
-@Service
 @RequiredArgsConstructor
+@Service
 public class OrderBroker {
 
     private final OrderService orderService;
-    public String createOrder(Long memberId, OrderRegisterParam registerParam) {
 
-        List<OrderProducts> orderProducts = registerParam.products().stream()
-                .map(param -> OrderProducts.create(param.productId(), param.quantity()))
+    public String register(OrderRegisterParam param) {
+        List<OrderProducts> orderProducts = param.orderProductsRegisterParams().stream()
+                .map(v -> OrderProducts.create(v.productId(), OrderProductsStatus.PREPARING, v.quantity()))
                 .toList();
-        orderService.save(memberId, registerParam.address(), registerParam.usePoint(), registerParam.paymentPrice(), orderProducts);
+        orderService.save(1L, OrderStatus.PREPARING, param.address(), param.usePoint(), param.paymentPrice(), orderProducts);
         return "success";
-
     }
 }
+
+

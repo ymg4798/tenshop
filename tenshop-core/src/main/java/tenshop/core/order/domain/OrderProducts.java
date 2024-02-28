@@ -2,7 +2,6 @@ package tenshop.core.order.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.NoArgsConstructor;
 import tenshop.config.auditing.BaseTimeEntity;
 
@@ -31,20 +30,14 @@ public class OrderProducts extends BaseTimeEntity {
 
     private int quantity;
 
-
-    @Builder
-    private OrderProducts(Long productId, OrderProductsStatus status, int quantity) {
+    public OrderProducts(Long productId, OrderProductsStatus status, int quantity) {
         this.productId = productId;
         this.status = status;
         this.quantity = quantity;
     }
 
-    public static OrderProducts create(Long productId, int quantity) {
-        return OrderProducts.builder()
-                .productId(productId)
-                .status(OrderProductsStatus.PREPARING)
-                .quantity(quantity)
-                .build();
+    public static OrderProducts create(Long productId, OrderProductsStatus status, int quantity) {
+        return new OrderProducts(productId, status, quantity);
     }
 
     public void setOrder(Order order) {
