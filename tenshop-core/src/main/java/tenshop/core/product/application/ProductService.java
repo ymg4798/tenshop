@@ -9,6 +9,8 @@ import tenshop.config.page.PageRequest;
 import tenshop.core.product.Product;
 import tenshop.core.product.domain.Category;
 import tenshop.core.product.repository.ProductRepository;
+import tenshop.core.users.Users;
+import tenshop.core.users.repository.UserRepository;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -16,6 +18,7 @@ import tenshop.core.product.repository.ProductRepository;
 public class ProductService {
 
 	private final ProductRepository productRepository;
+	private final UserRepository userRepository;
 
 	@Transactional
 	public void save(String status, int stock, int price, String name, String content, Category category) {
@@ -57,6 +60,17 @@ public class ProductService {
 			.orElseThrow(() -> new IllegalArgumentException("해당 상품이 존재하지 않습니다."));
 
 		productRepository.delete(product);
+	}
+
+	@Transactional
+	public void buy(Long productId, int quantity, Long userId) {
+		Users user = userRepository.findById(userId)
+			.orElseThrow(() -> new IllegalArgumentException("해당 회원이 존재하지 않습니다."));
+		Product product = productRepository.findById(productId)
+			.orElseThrow(() -> new IllegalArgumentException("해당 상품이 존재하지 않습니다."));
+
+		product.decreaseStock(quantity);
+		productRepository.save(product);
 	}
 }
 

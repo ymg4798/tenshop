@@ -9,10 +9,12 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import tenshop.api.product.application.ProductBroker;
+import tenshop.api.product.dto.ProductBuyParam;
 import tenshop.api.product.dto.ProductRegisterParam;
 import tenshop.api.product.dto.ProductSearchCondition;
 import tenshop.api.product.dto.ProductUpdateParam;
@@ -54,6 +56,15 @@ public class ProductController {
 		Map<String, Object> map = new HashMap<>();
 
 		map.put("message", productBroker.delete(id));
+
+		return Response.create(map);
+	}
+
+	@PostMapping("/products/buy")
+	public Response buyProducts(@RequestBody ProductBuyParam param, @RequestHeader("userId") Long userId) {
+		Map<String, Object> map = new HashMap<>();
+
+		map.put("message", productBroker.buy(param, userId));
 
 		return Response.create(map);
 	}

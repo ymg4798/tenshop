@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import tenshop.api.product.dto.ProductBuyParam;
 import tenshop.api.product.dto.ProductRegisterParam;
 import tenshop.api.product.dto.ProductSearchCondition;
 import tenshop.api.product.dto.ProductSearchResponse;
@@ -50,6 +51,14 @@ public class ProductBroker {
 
 	public String delete(Long id) {
 		productService.delete(id);
+		return "success";
+	}
+
+	@Transactional
+	public String buy(ProductBuyParam param, Long userId) {
+		param.buys().forEach(buy -> {
+			productService.buy(buy.productId(), buy.quantity(), userId);
+		});
 		return "success";
 	}
 }
