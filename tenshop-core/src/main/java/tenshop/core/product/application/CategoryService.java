@@ -2,7 +2,6 @@ package tenshop.core.product.application;
 
 import static tenshop.core.product.domain.Category.*;
 
-import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,9 +18,6 @@ public class CategoryService {
 
 	@Transactional
 	public void save(String name, int depth, Category parent, Category... children) {
-		if (parent != null && parent.getId() != null) {
-			parent = categoryRepository.save(parent);
-		}
 		Category category = create(name, depth, parent, children);
 		categoryRepository.save(category);
 	}
@@ -29,21 +25,13 @@ public class CategoryService {
 	@Transactional
 	public void update(Long id, String name) {
 		Category category = categoryRepository.findById(id)
-				.orElseThrow(() -> new IllegalArgumentException("해당 카테고리가 존재하지 않습니다."));
+			.orElseThrow(() -> new IllegalArgumentException("해당 카테고리가 존재하지 않습니다."));
 		category.update(name);
 	}
 
 	public Category findById(Long id) {
 		return categoryRepository.findById(id)
-				.orElseThrow(() -> new IllegalArgumentException("해당 카테고리가 존재하지 않습니다."));
-	}
-
-	@Transactional
-	public Category findCategoryAndChildrenById(Long id) {
-		Category parent = categoryRepository.findById(id)
 			.orElseThrow(() -> new IllegalArgumentException("해당 카테고리가 존재하지 않습니다."));
-		Hibernate.initialize(parent.getChildren());
-		return parent;
 	}
 }
 

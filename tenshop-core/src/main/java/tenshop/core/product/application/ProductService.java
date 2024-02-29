@@ -8,7 +8,6 @@ import tenshop.config.page.PageModel;
 import tenshop.config.page.PageRequest;
 import tenshop.core.product.Product;
 import tenshop.core.product.domain.Category;
-import tenshop.core.product.repository.CategoryRepository;
 import tenshop.core.product.repository.ProductRepository;
 
 @Transactional(readOnly = true)
@@ -17,12 +16,9 @@ import tenshop.core.product.repository.ProductRepository;
 public class ProductService {
 
 	private final ProductRepository productRepository;
-	private final CategoryRepository categoryRepository;
 
 	@Transactional
-	public void save(String status, int stock, int price, String name, String content, Long id) {
-		Category category = categoryRepository.findById(id)
-			.orElseThrow(() -> new IllegalArgumentException("해당 카테고리가 존재하지 않습니다."));
+	public void save(String status, int stock, int price, String name, String content, Category category) {
 		Product product = Product.create(status, stock, price, name, content, category);
 		productRepository.save(product);
 	}

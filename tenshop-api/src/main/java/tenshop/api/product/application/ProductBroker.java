@@ -13,16 +13,20 @@ import tenshop.api.product.dto.ProductUpdateParam;
 import tenshop.config.page.PageModel;
 import tenshop.config.page.PageResponse;
 import tenshop.core.product.Product;
+import tenshop.core.product.application.CategoryService;
 import tenshop.core.product.application.ProductService;
+import tenshop.core.product.domain.Category;
 
 @RequiredArgsConstructor
 @Service
 public class ProductBroker {
 
 	private final ProductService productService;
+	private final CategoryService categoryService;
 
 	public String save(ProductRegisterParam param) {
-		productService.save(param.status(), param.stock(), param.price(), param.name(), param.content(), param.categoryId());
+		Category category = categoryService.findById(param.categoryId());
+		productService.save(param.status(), param.stock(), param.price(), param.name(), param.content(), category);
 		return "success";
 	}
 

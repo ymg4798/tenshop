@@ -51,7 +51,7 @@ public class Category extends BaseTimeEntity {
 
     public void setParent(Category parent) {
         this.parent = parent;
-        if(parent != null) {
+        if (parent != null) {
             parent.getChildren().add(this);
         }
     }

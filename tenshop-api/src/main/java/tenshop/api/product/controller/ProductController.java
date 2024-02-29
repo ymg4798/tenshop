@@ -1,7 +1,5 @@
 package tenshop.api.product.controller;
 
-import static tenshop.config.annotation.aspect.dto.Response.*;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,7 +31,7 @@ public class ProductController {
 
 		map.put("message", productBroker.save(param));
 
-		return create(map);
+		return Response.create(map);
 	}
 
 	@PatchMapping("/product/{id}")
@@ -42,12 +40,12 @@ public class ProductController {
 
 		map.put("message", productBroker.update(id, param));
 
-		return create(map);
+		return Response.create(map);
 	}
 
 	@GetMapping("/products")
 	public Response searchProducts(ProductSearchCondition condition){
-		return create(productBroker.findProductsBySearchCondition(condition));
+		return Response.create(productBroker.findProductsBySearchCondition(condition));
 	}
 }
 

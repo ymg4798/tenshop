@@ -56,17 +56,22 @@ public class Product extends BaseTimeEntity {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ProductReview> productReviews = new ArrayList<>();
 
-    public Product(ProductStatus status, int stock, int price, String name, String content, Category category) {
+    public Product(ProductStatus status, int stock, int price, String name, String content) {
         this.status = status;
         this.stock = stock;
         this.price = price;
         this.name = name;
         this.content = content;
+    }
+
+    public void setCategory(Category category) {
         this.category = category;
+        category.getProducts().add(this);
     }
 
     public static Product create(String status, int stock, int price, String name, String content, Category category) {
-        Product product = new Product(ofName(ProductStatus.class, status), stock, price, name, content, category);
+        Product product = new Product(ofName(ProductStatus.class, status), stock, price, name, content);
+        product.setCategory(category);
         return product;
     }
 

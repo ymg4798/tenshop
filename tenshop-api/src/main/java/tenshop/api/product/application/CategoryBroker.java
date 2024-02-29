@@ -19,7 +19,7 @@ public class CategoryBroker {
 		int depth = 1;
 
 		if (param.parentId() != null) {
-			parent = categoryService.findCategoryAndChildrenById(param.parentId());
+			parent = categoryService.findById(param.parentId());
 			depth = parent.getDepth() + 1;
 		}
 
