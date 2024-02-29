@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import tenshop.api.product.dto.ProductRegisterParam;
@@ -24,6 +25,7 @@ public class ProductBroker {
 	private final ProductService productService;
 	private final CategoryService categoryService;
 
+	@Transactional
 	public String save(ProductRegisterParam param) {
 		Category category = categoryService.findById(param.categoryId());
 		productService.save(param.status(), param.stock(), param.price(), param.name(), param.content(), category);

@@ -1,6 +1,7 @@
 package tenshop.api.product.application;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import tenshop.api.product.dto.CategoryRegisterParam;
@@ -14,6 +15,7 @@ public class CategoryBroker {
 
 	private final CategoryService categoryService;
 
+	@Transactional
 	public String save(CategoryRegisterParam param) {
 		Category parent = null;
 		int depth = 1;
