@@ -36,8 +36,8 @@ public class ProductController {
 		return create(map);
 	}
 
-	@PatchMapping("/product/{id}/status")
-	public Response updateStatus(@PathVariable("id") Long id, @RequestBody ProductUpdateParam param) {
+	@PatchMapping("/product/{id}")
+	public Response updateProduct(@PathVariable("id") Long id, @RequestBody ProductUpdateParam param) {
 		Map<String, Object> map = new HashMap<>();
 
 		map.put("message", productBroker.update(id, param));

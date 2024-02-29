@@ -70,8 +70,12 @@ public class Product extends BaseTimeEntity {
         return product;
     }
 
-    public void statusUpdate(String status) {
-        this.status = ofName(ProductStatus.class, status);
+    public void updateProduct(String status, String name, String content, Integer stock, Integer price) {
+        if (status != null) this.status = ofName(ProductStatus.class, status);
+        if (name != null) this.name = name;
+        if (content != null) this.content = content;
+        if (stock != null) this.stock = stock;
+        if (price != null) this.price = price;
     }
 }
 

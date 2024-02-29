@@ -13,9 +13,7 @@ import tenshop.api.product.dto.ProductUpdateParam;
 import tenshop.config.page.PageModel;
 import tenshop.config.page.PageResponse;
 import tenshop.core.product.Product;
-import tenshop.core.product.application.CategoryService;
 import tenshop.core.product.application.ProductService;
-import tenshop.core.product.domain.Category;
 
 @RequiredArgsConstructor
 @Service
@@ -29,7 +27,7 @@ public class ProductBroker {
 	}
 
 	public String update(Long id, ProductUpdateParam param) {
-		productService.update(id, param.status());
+		productService.update(id, param.status(), param.name(), param.content(), param.price(), param.stock());
 		return "success";
 	}
 

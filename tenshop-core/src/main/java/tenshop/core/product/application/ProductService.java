@@ -28,11 +28,22 @@ public class ProductService {
 	}
 
 	@Transactional
-	public void update(Long id, String status) {
+	public void update(Long id, String status, String name, String content, Integer price, Integer stock) {
 		Product product = productRepository.findById(id)
-				.orElseThrow(() -> new IllegalArgumentException("해당 상품이 존재하지 않습니다."));
-		product.statusUpdate(status);
+			.orElseThrow(() -> new IllegalArgumentException("해당 상품이 존재하지 않습니다."));
+
+		String currentStatus = (status != null) ? status : product.getStatus().getName();
+		String currentName = (name != null) ? name : product.getName();
+		String currentContent = (content != null) ? content : product.getContent();
+		Integer currentStock = (stock != null) ? stock : product.getStock();
+		Integer currentPrice = (price != null) ? price : product.getPrice();
+
+		if (currentStock <= 0) {
+			currentStatus = "품절";
+		}
+		product.updateProduct(currentStatus, currentName, currentContent, currentStock, currentPrice);
 	}
+
 
 	public Product findById(Long id) {
 		return productRepository.findById(id)
