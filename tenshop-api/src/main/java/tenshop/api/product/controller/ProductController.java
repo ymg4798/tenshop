@@ -3,6 +3,7 @@ package tenshop.api.product.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -46,6 +47,15 @@ public class ProductController {
 	@GetMapping("/products")
 	public Response searchProducts(ProductSearchCondition condition){
 		return Response.create(productBroker.findProductsBySearchCondition(condition));
+	}
+
+	@DeleteMapping("/product/{id}")
+	public Response deleteProduct(@PathVariable("id") Long id) {
+		Map<String, Object> map = new HashMap<>();
+
+		map.put("message", productBroker.delete(id));
+
+		return Response.create(map);
 	}
 }
 

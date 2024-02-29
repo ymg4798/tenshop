@@ -50,6 +50,14 @@ public class ProductService {
 		return new PageModel<>(productRepository.findProductsBySearchCondition(
 			name, categoryId, minPrice, maxPrice, new PageRequest(page).of()));
 	}
+
+	@Transactional
+	public void delete(Long id) {
+		Product product = productRepository.findById(id)
+			.orElseThrow(() -> new IllegalArgumentException("해당 상품이 존재하지 않습니다."));
+
+		productRepository.delete(product);
+	}
 }
 
 

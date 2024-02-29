@@ -47,6 +47,11 @@ public class ProductBroker {
 
 		return new PageResponse<>(model, productSearchResponse);
 	}
+
+	public String delete(Long id) {
+		productService.delete(id);
+		return "success";
+	}
 }
 
 
