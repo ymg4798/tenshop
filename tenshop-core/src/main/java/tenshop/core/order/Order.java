@@ -38,7 +38,6 @@ public class Order extends BaseTimeEntity {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     List<OrderProducts> orderProducts = new ArrayList<>();
 
-    @Builder
     public Order(Long userId, OrderStatus status, String address, int usePoint, int paymentPrice) {
         this.userId = userId;
         this.status = status;
@@ -47,33 +46,33 @@ public class Order extends BaseTimeEntity {
         this.paymentPrice = paymentPrice;
     }
 
-
-
-
-    public static Order create(Long userId, String address, int usePoint, int paymentPrice, List<OrderProducts> orderProducts) {
-        Order order = Order.builder()
-                .userId(userId)
-                .status(OrderStatus.PREPARING)
-                .address(address)
-                .usePoint(usePoint)
-                .paymentPrice(paymentPrice)
-                .build();
-        //Order order = new Order(userId, OrderStatus.PREPARING, address, usePoint, paymentPrice);
-
+    public static Order create(Long userId, OrderStatus status, String address, int usePoint, int paymentPrice, List<OrderProducts> orderProducts) {
+        Order order = new Order(userId, status, address, usePoint, paymentPrice);
         for (OrderProducts orderProduct : orderProducts) {
             order.addOrderProduct(orderProduct);
         }
-
         return order;
-
     }
 
-    private void addOrderProduct(OrderProducts orderProduct){
+    public void addOrderProduct(OrderProducts orderProduct){
         this.orderProducts.add(orderProduct);
         orderProduct.setOrder(this);
     }
 
 
+    public void cancel() {
+        if(this.status != OrderStatus.PREPARING) {
+            throw new IllegalStateException("주문 취소 가능한 상태가 아닙니다 id : " + id);
+        }
+        this.status = OrderStatus.REFUND;
+        for (OrderProducts orderProduct : orderProducts) {
+            orderProduct.cancel();
+        }
+    }
+
+    public void update(OrderStatus orderStatus) {
+        this.status = orderStatus;
+    }
 }
 
 

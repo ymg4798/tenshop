@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import tenshop.config.auditing.BaseTimeEntity;
 
 import tenshop.core.order.Order;
+import tenshop.core.order.converter.OrderProductsStatusConverter;
 import tenshop.core.order.converter.enums.OrderProductsStatus;
 import tenshop.core.product.converter.ProductStatusConverter;
 
@@ -25,30 +26,29 @@ public class OrderProducts extends BaseTimeEntity {
     @JoinColumn(name = "order_id")
     private Order order;
 
-    @Convert(converter = ProductStatusConverter.class)
+    @Convert(converter = OrderProductsStatusConverter.class)
     @Column(columnDefinition = "varchar(10)")
     private OrderProductsStatus status;
 
     private int quantity;
 
 
-    @Builder
-    private OrderProducts(Long productId, OrderProductsStatus status, int quantity) {
+    public OrderProducts(Long productId, OrderProductsStatus status, int quantity) {
         this.productId = productId;
         this.status = status;
         this.quantity = quantity;
     }
 
-    public static OrderProducts create(Long productId, int quantity) {
-        return OrderProducts.builder()
-                .productId(productId)
-                .status(OrderProductsStatus.PREPARING)
-                .quantity(quantity)
-                .build();
+    public static OrderProducts create(Long productId, OrderProductsStatus status, int quantity) {
+        return new OrderProducts(productId, status, quantity);
     }
 
     public void setOrder(Order order) {
         this.order = order;
+    }
+
+    public void cancel() {
+        this.status = OrderProductsStatus.REFUND;
     }
 }
 

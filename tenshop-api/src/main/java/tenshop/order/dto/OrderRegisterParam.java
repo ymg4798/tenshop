@@ -6,7 +6,7 @@ public record OrderRegisterParam(
         String address,
         int usePoint,
         int paymentPrice,
-        List<OrderRegisterProductParam> products
+        List<OrderProductsRegisterParam> orderProductsRegisterParams
 
 ) {
 
