@@ -9,7 +9,6 @@ import tenshop.config.page.PageRequest;
 import tenshop.core.product.Product;
 import tenshop.core.product.domain.Category;
 import tenshop.core.product.repository.ProductRepository;
-import tenshop.core.users.Users;
 import tenshop.core.users.repository.UserRepository;
 
 @Transactional(readOnly = true)
@@ -27,22 +26,17 @@ public class ProductService {
 	}
 
 	@Transactional
-	public void update(Long id, String status, String name, String content, Integer price, Integer stock) {
+	public void update(Long id, String content, int stock) {
 		Product product = productRepository.findById(id)
 			.orElseThrow(() -> new IllegalArgumentException("해당 상품이 존재하지 않습니다."));
-
-		String currentStatus = (status != null) ? status : product.getStatus().getName();
-		String currentName = (name != null) ? name : product.getName();
-		String currentContent = (content != null) ? content : product.getContent();
-		Integer currentStock = (stock != null) ? stock : product.getStock();
-		Integer currentPrice = (price != null) ? price : product.getPrice();
-
-		if (currentStock <= 0) {
-			currentStatus = "품절";
-		}
-		product.updateProduct(currentStatus, currentName, currentContent, currentStock, currentPrice);
+		product.updateProduct(content, stock);
 	}
-
+	@Transactional
+	public void updateStatus(Long id, String status) {
+		Product product = productRepository.findById(id)
+			.orElseThrow(() -> new IllegalArgumentException("해당 상품이 존재하지 않습니다."));
+		product.statusUpdate(status);
+	}
 
 	public Product findById(Long id) {
 		return productRepository.findById(id)
@@ -52,25 +46,6 @@ public class ProductService {
 	public PageModel<Product> findProductsBySearchCondition(String name, Long categoryId, Integer minPrice, Integer maxPrice, Integer page) {
 		return new PageModel<>(productRepository.findProductsBySearchCondition(
 			name, categoryId, minPrice, maxPrice, new PageRequest(page).of()));
-	}
-
-	@Transactional
-	public void delete(Long id) {
-		Product product = productRepository.findById(id)
-			.orElseThrow(() -> new IllegalArgumentException("해당 상품이 존재하지 않습니다."));
-
-		productRepository.delete(product);
-	}
-
-	@Transactional
-	public void buy(Long productId, int quantity, Long userId) {
-		Users user = userRepository.findById(userId)
-			.orElseThrow(() -> new IllegalArgumentException("해당 회원이 존재하지 않습니다."));
-		Product product = productRepository.findById(productId)
-			.orElseThrow(() -> new IllegalArgumentException("해당 상품이 존재하지 않습니다."));
-
-		product.decreaseStock(quantity);
-		productRepository.save(product);
 	}
 }
 

@@ -7,11 +7,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
-import tenshop.api.product.dto.ProductBuyParam;
 import tenshop.api.product.dto.ProductRegisterParam;
 import tenshop.api.product.dto.ProductSearchCondition;
 import tenshop.api.product.dto.ProductSearchResponse;
 import tenshop.api.product.dto.ProductUpdateParam;
+import tenshop.api.product.dto.ProductUpdateStatusParam;
 import tenshop.config.page.PageModel;
 import tenshop.config.page.PageResponse;
 import tenshop.core.product.Product;
@@ -34,7 +34,12 @@ public class ProductBroker {
 	}
 
 	public String update(Long id, ProductUpdateParam param) {
-		productService.update(id, param.status(), param.name(), param.content(), param.price(), param.stock());
+		productService.update(id, param.content(), param.stock());
+		return "success";
+	}
+
+	public String updateStatus(Long id, ProductUpdateStatusParam param) {
+		productService.updateStatus(id, param.status());
 		return "success";
 	}
 
@@ -47,19 +52,6 @@ public class ProductBroker {
 			.collect(Collectors.toList());
 
 		return new PageResponse<>(model, productSearchResponse);
-	}
-
-	public String delete(Long id) {
-		productService.delete(id);
-		return "success";
-	}
-
-	@Transactional
-	public String buy(ProductBuyParam param, Long userId) {
-		param.buys().forEach(buy -> {
-			productService.buy(buy.productId(), buy.quantity(), userId);
-		});
-		return "success";
 	}
 }
 

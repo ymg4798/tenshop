@@ -70,17 +70,19 @@ public class Product extends BaseTimeEntity {
     }
 
     public static Product create(String status, int stock, int price, String name, String content, Category category) {
-        Product product = new Product(ofName(ProductStatus.class, status), stock, price, name, content);
+        int finalStock = isStatusSoldOut(status) ? 0 : stock;
+        Product product = new Product(ofName(ProductStatus.class, status), finalStock, price, name, content);
         product.setCategory(category);
         return product;
     }
 
-    public void updateProduct(String status, String name, String content, Integer stock, Integer price) {
-        if (status != null) this.status = ofName(ProductStatus.class, status);
-        if (name != null) this.name = name;
-        if (content != null) this.content = content;
-        if (stock != null) this.stock = stock;
-        if (price != null) this.price = price;
+    public void updateProduct(String content, int stock) {
+        this.content = content;
+        this.stock = stock;
+    }
+
+    public void statusUpdate(String status) {
+        this.status = ofName(ProductStatus.class, status);
     }
 
     public void decreaseStock(int quantity) {
@@ -88,6 +90,10 @@ public class Product extends BaseTimeEntity {
             throw new IllegalArgumentException("재고가 부족합니다.");
         }
         this.stock -= quantity;
+    }
+
+    public static boolean isStatusSoldOut(String status){
+        return "품절".equals(status);
     }
 }
 
