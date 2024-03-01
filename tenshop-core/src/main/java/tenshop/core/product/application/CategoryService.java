@@ -33,6 +33,14 @@ public class CategoryService {
 		return categoryRepository.findById(id)
 			.orElseThrow(() -> new IllegalArgumentException("해당 카테고리가 존재하지 않습니다."));
 	}
+
+	@Transactional
+	public void delete(Long id) {
+		Category category = categoryRepository.findById(id)
+			.orElseThrow(() -> new IllegalArgumentException("해당 카테고리가 존재하지 않습니다."));
+		category.validateDeletion();
+		categoryRepository.delete(category);
+	}
 }
 
 

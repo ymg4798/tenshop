@@ -28,6 +28,10 @@ public class ProductController {
 
 	@PostMapping("/product")
 	public Response register(@RequestBody ProductRegisterParam param) {
+		if (param.stock() <= 0) {
+			throw new IllegalStateException("재고량은 0 이하가 될 수 없습니다.");
+		}
+
 		Map<String, String> map = new HashMap<>();
 
 		map.put("message", productBroker.save(param));

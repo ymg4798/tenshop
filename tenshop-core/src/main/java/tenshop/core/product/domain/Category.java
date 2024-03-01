@@ -29,7 +29,7 @@ public class Category extends BaseTimeEntity {
     @Column(name = "category_id")
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
     private Category parent;
 
@@ -80,6 +80,12 @@ public class Category extends BaseTimeEntity {
 
     public void update(String name) {
         this.name = name;
+    }
+
+    public void validateDeletion() {
+        if (!this.children.isEmpty()) {
+            throw new IllegalStateException("자식 카테고리가 존재하기 때문에 삭제할 수 없습니다.");
+        }
     }
 }
 

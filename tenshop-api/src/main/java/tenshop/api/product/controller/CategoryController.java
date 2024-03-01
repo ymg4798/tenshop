@@ -36,6 +36,15 @@ public class CategoryController {
 
 		return Response.create(map);
 	}
+
+	@DeleteMapping("/category/{id}")
+	public Response delete(@PathVariable("id") Long id) {
+		Map<String, String> map = new HashMap<>();
+
+		map.put("message", categoryBroker.delete(id));
+
+		return Response.create(map);
+	}
 }
 
 

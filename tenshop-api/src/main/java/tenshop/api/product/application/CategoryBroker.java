@@ -34,6 +34,11 @@ public class CategoryBroker {
 		categoryService.update(id, param.name());
 		return "success";
 	}
+
+	public String delete(Long id) {
+		categoryService.delete(id);
+		return "success";
+	}
 }
 
 
