@@ -4,12 +4,16 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import tenshop.config.converter.EnumConverterUtils;
+import tenshop.config.page.PageModel;
+import tenshop.config.page.PageResponse;
+import tenshop.core.order.Order;
 import tenshop.core.order.application.OrderService;
 import tenshop.core.order.converter.enums.OrderProductsStatus;
 import tenshop.core.order.converter.enums.OrderStatus;
 import tenshop.core.order.domain.OrderProducts;
-import tenshop.order.dto.OrderListResponse;
+import tenshop.core.order.dto.OrderListResponse;
 import tenshop.order.dto.OrderRegisterParam;
+import tenshop.core.order.dto.OrderResponse;
 import tenshop.order.dto.OrderUpdateParam;
 
 @RequiredArgsConstructor
@@ -18,7 +22,7 @@ public class OrderBroker {
 
     private final OrderService orderService;
 
-    //todo product 있다면 product 재고 감소, 사용자 포인트 있는지 있다면 감소
+
     public String register(OrderRegisterParam param) {
         List<OrderProducts> orderProducts = param.orderProductsRegisterParams().stream()
                 .map(v -> OrderProducts.create(v.productId(), OrderProductsStatus.PREPARING, v.quantity()))
@@ -27,7 +31,7 @@ public class OrderBroker {
         return "success";
     }
 
-    //todo product 있다면 product 재고 증가
+
     public String cancel(Long orderId) {
         orderService.cancel(orderId);
         return "success";
@@ -40,15 +44,12 @@ public class OrderBroker {
         return "success";
     }
 
-    public Object findById(Long orderId) {
-        return orderService.findById(orderId);
+    public List<OrderResponse> findOrderInformation(Long orderId) {
+        return orderService.findOrderInformation(orderId);
     }
 
-
-    public OrderListResponse getOrders(int page, int size) {
-
-
-
+    public PageModel<OrderListResponse> findOrders(Long userId, int page, int size) {
+        return orderService.findOrders(userId, page, size);
     }
 }
 

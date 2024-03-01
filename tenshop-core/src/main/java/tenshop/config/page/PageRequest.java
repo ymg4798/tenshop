@@ -9,7 +9,7 @@ public class PageRequest {
     private final Sort.Direction direction = Sort.Direction.DESC;
     private Integer page;
     private Integer size;
-    private String sort = "createDate";
+    private String sort = "createdDate";
 
     public PageRequest(Integer page) {
         this.page = setPage(page);

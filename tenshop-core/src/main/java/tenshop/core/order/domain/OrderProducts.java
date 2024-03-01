@@ -47,6 +47,10 @@ public class OrderProducts extends BaseTimeEntity {
         this.order = order;
     }
 
+    public void updateTo(OrderProductsStatus orderProductsStatus) {
+        this.status = orderProductsStatus;
+    }
+
     public void cancel() {
         this.status = OrderProductsStatus.REFUND;
     }

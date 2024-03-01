@@ -71,7 +71,11 @@ public class Order extends BaseTimeEntity {
     }
 
     public void update(OrderStatus orderStatus) {
+        this.status.validateOrderStatusForUpdateBy(orderStatus);
         this.status = orderStatus;
+        for (OrderProducts orderProduct : orderProducts) {
+            orderProduct.updateTo(this.status.getOrderProductsStatus());
+        }
     }
 }
 
