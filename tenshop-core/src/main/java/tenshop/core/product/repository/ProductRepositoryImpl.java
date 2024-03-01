@@ -2,7 +2,10 @@ package tenshop.core.product.repository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
+
 import tenshop.config.querydsl.QuerydslRepositorySupport;
 import tenshop.core.product.Product;
 import tenshop.core.product.QProduct;
@@ -15,6 +18,10 @@ public class ProductRepositoryImpl extends QuerydslRepositorySupport implements 
 	public Page<Product> findProductsBySearchCondition(String name, Long categoryId, Integer minPrice, Integer maxPrice, Pageable pageable) {
 		QProduct product = QProduct.product;
 
+		OrderSpecifier<?>[] orderBy = new OrderSpecifier<?>[]{
+			product.modifiedDate.coalesce(product.createdDate).desc()
+		};
+
 		return applyPagination(pageable,
 			contentQuery -> contentQuery
 				.select(product)
@@ -23,7 +30,8 @@ public class ProductRepositoryImpl extends QuerydslRepositorySupport implements 
 					nameContains(name),
 					categoryIdEq(categoryId),
 					priceBetween(minPrice, maxPrice)
-				),
+				)
+				.orderBy(orderBy),
 			countQuery -> countQuery
 				.select(product.count())
 				.from(product)
