@@ -2,10 +2,13 @@ package tenshop.core.product.application;
 
 import static tenshop.core.product.domain.Category.*;
 
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import tenshop.config.page.PageModel;
+import tenshop.config.page.PageRequest;
 import tenshop.core.product.domain.Category;
 import tenshop.core.product.repository.CategoryRepository;
 
@@ -40,6 +43,12 @@ public class CategoryService {
 			.orElseThrow(() -> new IllegalArgumentException("해당 카테고리가 존재하지 않습니다."));
 		category.validateDeletion();
 		categoryRepository.delete(category);
+	}
+
+	public PageModel<Category> findAllBySearchCondition(int depth, Integer page) {
+		Page<Category> allBySearchCondition =
+			categoryRepository.findAllBySearchCondition(depth, new PageRequest(page).of());
+		return new PageModel<>(allBySearchCondition);
 	}
 }
 

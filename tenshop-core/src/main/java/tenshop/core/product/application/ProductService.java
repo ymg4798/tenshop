@@ -1,5 +1,6 @@
 package tenshop.core.product.application;
 
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,9 +44,10 @@ public class ProductService {
 			.orElseThrow(() -> new IllegalArgumentException("해당 상품이 존재하지 않습니다."));
 	}
 
-	public PageModel<Product> findProductsBySearchCondition(String name, Long categoryId, Integer minPrice, Integer maxPrice, Integer page) {
-		return new PageModel<>(productRepository.findProductsBySearchCondition(
-			name, categoryId, minPrice, maxPrice, new PageRequest(page).of()));
+	public PageModel<Product> findAllBySearchCondition(String name, Long categoryId, Integer minPrice, Integer maxPrice, Integer page) {
+		Page<Product> allBySearchCondition =
+			productRepository.findAllBySearchCondition(name, categoryId, minPrice, maxPrice, new PageRequest(page).of());
+		return new PageModel<>(allBySearchCondition);
 	}
 }
 

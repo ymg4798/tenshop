@@ -15,7 +15,7 @@ public class ProductRepositoryImpl extends QuerydslRepositorySupport implements 
 		super(Product.class);
 	}
 	@Override
-	public Page<Product> findProductsBySearchCondition(String name, Long categoryId, Integer minPrice, Integer maxPrice, Pageable pageable) {
+	public Page<Product> findAllBySearchCondition(String name, Long categoryId, Integer minPrice, Integer maxPrice, Pageable pageable) {
 		QProduct product = QProduct.product;
 
 		OrderSpecifier<?>[] orderBy = new OrderSpecifier<?>[]{

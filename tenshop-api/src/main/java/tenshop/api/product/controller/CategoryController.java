@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import lombok.RequiredArgsConstructor;
 import tenshop.api.product.application.CategoryBroker;
 import tenshop.api.product.dto.CategoryRegisterParam;
+import tenshop.api.product.dto.CategorySearchCondition;
 import tenshop.api.product.dto.CategoryUpdateParam;
 import tenshop.config.annotation.ResponseAnnotation;
 import tenshop.config.annotation.aspect.dto.Response;
@@ -44,6 +45,11 @@ public class CategoryController {
 		map.put("message", categoryBroker.delete(id));
 
 		return Response.create(map);
+	}
+
+	@GetMapping("/categories")
+	public Response search(CategorySearchCondition condition) {
+		return Response.create(categoryBroker.findAllBySearchCondition(condition));
 	}
 }
 

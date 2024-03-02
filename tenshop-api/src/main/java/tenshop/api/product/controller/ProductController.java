@@ -58,8 +58,8 @@ public class ProductController {
 	}
 
 	@GetMapping("/products")
-	public Response searchProducts(ProductSearchCondition condition){
-		return Response.create(productBroker.findProductsBySearchCondition(condition));
+	public Response search(ProductSearchCondition condition){
+		return Response.create(productBroker.findAllBySearchCondition(condition));
 	}
 }
 
