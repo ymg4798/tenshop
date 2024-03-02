@@ -27,3 +27,5 @@ public class CategoryRepositoryImpl extends QuerydslRepositorySupport implements
 		);
 	}
 }
+
+

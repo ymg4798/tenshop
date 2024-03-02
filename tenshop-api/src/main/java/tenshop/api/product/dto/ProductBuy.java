@@ -5,3 +5,5 @@ public record ProductBuy(
 	int quantity
 ) {
 }
+
+

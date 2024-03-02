@@ -2,7 +2,7 @@ package tenshop.api.product.dto;
 
 public record ProductSearchCondition (
 	String name,
-	Long categoryId,
+	String categoryName,
 	Integer minPrice,
 	Integer maxPrice,
 	Integer page

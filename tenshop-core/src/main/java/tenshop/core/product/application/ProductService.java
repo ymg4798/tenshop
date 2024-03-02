@@ -10,7 +10,6 @@ import tenshop.config.page.PageRequest;
 import tenshop.core.product.Product;
 import tenshop.core.product.domain.Category;
 import tenshop.core.product.repository.ProductRepository;
-import tenshop.core.users.repository.UserRepository;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -18,7 +17,6 @@ import tenshop.core.users.repository.UserRepository;
 public class ProductService {
 
 	private final ProductRepository productRepository;
-	private final UserRepository userRepository;
 
 	@Transactional
 	public void save(String status, int stock, int price, String name, String content, Category category) {
@@ -44,9 +42,9 @@ public class ProductService {
 			.orElseThrow(() -> new IllegalArgumentException("해당 상품이 존재하지 않습니다."));
 	}
 
-	public PageModel<Product> findAllBySearchCondition(String name, Long categoryId, Integer minPrice, Integer maxPrice, Integer page) {
+	public PageModel<Product> findAllBySearchCondition(String name, String categoryName, Integer minPrice, Integer maxPrice, Integer page) {
 		Page<Product> allBySearchCondition =
-			productRepository.findAllBySearchCondition(name, categoryId, minPrice, maxPrice, new PageRequest(page).of());
+			productRepository.findAllBySearchCondition(name, categoryName, minPrice, maxPrice, new PageRequest(page).of());
 		return new PageModel<>(allBySearchCondition);
 	}
 }

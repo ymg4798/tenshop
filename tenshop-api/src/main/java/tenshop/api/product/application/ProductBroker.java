@@ -43,9 +43,10 @@ public class ProductBroker {
 		return "success";
 	}
 
+	@Transactional
 	public PageResponse<ProductSearchResponse> findAllBySearchCondition(ProductSearchCondition condition) {
 		PageModel<Product> model =
-			productService.findAllBySearchCondition(condition.name(), condition.categoryId(), condition.minPrice(), condition.maxPrice(), condition.page());
+			productService.findAllBySearchCondition(condition.name(), condition.categoryName(), condition.minPrice(), condition.maxPrice(), condition.page());
 
 		List<ProductSearchResponse> productSearchResponse = model.getContents().stream()
 			.map(ProductSearchResponse::toResponse)

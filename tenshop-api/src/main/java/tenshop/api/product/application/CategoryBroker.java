@@ -47,6 +47,7 @@ public class CategoryBroker {
 		return "success";
 	}
 
+	@Transactional
 	public PageResponse<CategorySearchResponse> findAllBySearchCondition(CategorySearchCondition condition) {
 		PageModel<Category> model =
 			categoryService.findAllBySearchCondition(condition.depth(), condition.page());

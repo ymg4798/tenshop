@@ -8,3 +8,5 @@ import tenshop.core.product.domain.Category;
 public interface CategoryRepositoryCustom {
 	Page<Category> findAllBySearchCondition(int depth, Pageable pageable);
 }
+
+

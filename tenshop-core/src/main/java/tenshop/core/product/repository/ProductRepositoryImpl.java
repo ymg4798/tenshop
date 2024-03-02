@@ -9,18 +9,23 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import tenshop.config.querydsl.QuerydslRepositorySupport;
 import tenshop.core.product.Product;
 import tenshop.core.product.QProduct;
+import tenshop.core.product.domain.QCategory;
 
 public class ProductRepositoryImpl extends QuerydslRepositorySupport implements ProductRepositoryCustom{
 	public ProductRepositoryImpl() {
 		super(Product.class);
 	}
 	@Override
-	public Page<Product> findAllBySearchCondition(String name, Long categoryId, Integer minPrice, Integer maxPrice, Pageable pageable) {
+	public Page<Product> findAllBySearchCondition(String name, String categoryName, Integer minPrice, Integer maxPrice, Pageable pageable) {
 		QProduct product = QProduct.product;
+		QCategory category = QCategory.category;
 
 		OrderSpecifier<?>[] orderBy = new OrderSpecifier<?>[]{
 			product.modifiedDate.coalesce(product.createdDate).desc()
 		};
+
+		BooleanExpression categoryCondition = categoryName != null ?
+			category.name.eq(categoryName) : null;
 
 		return applyPagination(pageable,
 			contentQuery -> contentQuery
@@ -28,7 +33,7 @@ public class ProductRepositoryImpl extends QuerydslRepositorySupport implements 
 				.from(product)
 				.where(
 					nameContains(name),
-					categoryIdEq(categoryId),
+					categoryCondition,
 					priceBetween(minPrice, maxPrice)
 				)
 				.orderBy(orderBy),
@@ -37,17 +42,14 @@ public class ProductRepositoryImpl extends QuerydslRepositorySupport implements 
 				.from(product)
 				.where(
 					nameContains(name),
-					categoryIdEq(categoryId),
+					categoryCondition,
 					priceBetween(minPrice, maxPrice)
-				));
+				)
+		);
 	}
 
 	private BooleanExpression nameContains(String name) {
 		return name != null ? QProduct.product.name.containsIgnoreCase(name) : null;
-	}
-
-	private BooleanExpression categoryIdEq(Long categoryId) {
-		return categoryId != null ? QProduct.product.category.id.eq(categoryId) : null;
 	}
 
 	private BooleanExpression priceBetween(Integer minPrice, Integer maxPrice) {

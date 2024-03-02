@@ -5,3 +5,5 @@ public record CategorySearchCondition(
 	Integer page
 ) {
 }
+
+

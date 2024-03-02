@@ -6,3 +6,5 @@ public record ProductBuyParam(
 	List<ProductBuy> buys
 ) {
 }
+
+
