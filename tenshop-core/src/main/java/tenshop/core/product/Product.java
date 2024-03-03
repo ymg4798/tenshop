@@ -83,6 +83,9 @@ public class Product extends BaseTimeEntity {
 
     public void statusUpdate(String status) {
         this.status = ofName(ProductStatus.class, status);
+        if (isStatusSoldOut(status)) {
+            this.stock = 0;
+        }
     }
 
     public static boolean isStatusSoldOut(String status){
