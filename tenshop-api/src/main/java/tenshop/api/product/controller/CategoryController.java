@@ -1,14 +1,21 @@
 package tenshop.api.product.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import tenshop.api.product.application.CategoryBroker;
 import tenshop.api.product.dto.CategoryRegisterParam;
-import tenshop.api.product.dto.CategorySearchCondition;
+import tenshop.api.product.dto.CategoryResponse;
 import tenshop.api.product.dto.CategoryUpdateParam;
 import tenshop.config.annotation.ResponseAnnotation;
 import tenshop.config.annotation.aspect.dto.Response;
@@ -48,8 +55,14 @@ public class CategoryController {
 	}
 
 	@GetMapping("/categories")
-	public Response search(CategorySearchCondition condition) {
-		return Response.create(categoryBroker.findAllBySearchCondition(condition));
+	public Response select() {
+		Map<String, List<CategoryResponse>> map = new HashMap<>();
+
+		List<CategoryResponse> categoriesTree = categoryBroker.select();
+
+		map.put("categories", categoriesTree);
+
+		return Response.create(map);
 	}
 }
 

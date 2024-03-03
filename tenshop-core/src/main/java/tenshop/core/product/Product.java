@@ -85,13 +85,6 @@ public class Product extends BaseTimeEntity {
         this.status = ofName(ProductStatus.class, status);
     }
 
-    public void decreaseStock(int quantity) {
-        if (this.stock < quantity) {
-            throw new IllegalArgumentException("재고가 부족합니다.");
-        }
-        this.stock -= quantity;
-    }
-
     public static boolean isStatusSoldOut(String status){
         return "품절".equals(status);
     }
