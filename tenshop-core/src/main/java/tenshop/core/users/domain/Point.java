@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import tenshop.config.auditing.BaseTimeEntity;
-import tenshop.core.users.Users;
+import tenshop.core.users.User;
 
 import java.time.LocalDateTime;
 
@@ -19,7 +19,7 @@ public class Point extends BaseTimeEntity {
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private Users users;
+    private User user;
 
     private String status;
 

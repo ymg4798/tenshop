@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import tenshop.config.auditing.BaseTimeEntity;
-import tenshop.core.users.Users;
+import tenshop.core.users.User;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
@@ -17,7 +17,7 @@ public class Address extends BaseTimeEntity {
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private Users users;
+    private User user;
 
     @Column(columnDefinition = "varchar(10)")
     private String city;

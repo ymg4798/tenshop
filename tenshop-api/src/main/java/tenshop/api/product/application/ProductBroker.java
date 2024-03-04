@@ -54,6 +54,36 @@ public class ProductBroker {
 
 		return new PageResponse<>(model, productSearchResponse);
 	}
+
+	@Transactional
+	public void use(Long productId, int quantity) {
+		Product product = productService.findById(productId);
+		validProductStock(product, quantity);
+
+		int stock = product.getStock() - quantity;
+		product.updateStock(stock);
+	}
+
+	private void validProductStock(Product product, int quantity) {
+		if (product.getStock() < quantity) {
+			throw new IllegalArgumentException("재고가 충분하지 않습니다.");
+		}
+	}
+
+	@Transactional
+	public void refund(Long productId, int quantity) {
+		Product product = productService.findById(productId);
+		validRefundQuantity(quantity);
+
+		int stock = product.getStock() + quantity;
+		product.updateStock(stock);
+	}
+
+	private void validRefundQuantity(int quantity) {
+		if (quantity < 0) {
+			throw new IllegalArgumentException("환불 수량은 음수일 수 없습니다.");
+		}
+	}
 }
 
 
