@@ -19,7 +19,7 @@ import tenshop.core.users.domain.Point;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class User {
+public class Users {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
